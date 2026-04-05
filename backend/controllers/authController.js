@@ -1,3 +1,6 @@
+const jwt = require('jsonwebtoken');
+const User = require('../models/User');
+
 const AUTHORIZED_EMAILS = [
   'tamannasaini860@gmail.com', 
   'sonakshidhiman12@gmail.com', 
