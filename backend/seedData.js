@@ -50,7 +50,7 @@ const seed = async () => {
       console.log(`👤 Created user: ${u.email} (${u.role})`);
     }
 
-    // ── Create Employees ───────────────────────────────────
+    // ── Create Employees (Authorized & Mock) ────────────────
     const employeesData = [
       {
         userId: users[2]._id,
@@ -64,21 +64,39 @@ const seed = async () => {
       },
       {
         userId: users[3]._id,
-        fullName: 'sonakshi',
+        fullName: 'Sonakshi Dhiman',
         employeeId: '13257035',
-        branch: 'defense security',
-        position: 'solider',
+        branch: 'military operations',
+        position: 'Captain',
         email: 'sonakshidhiman12@gmail.com',
         isVerified: true,
         isBiometricDone: true,
       },
+      {
+        fullName: 'Vikram Singh',
+        employeeId: '13257099',
+        branch: 'defense intelligence',
+        position: 'major',
+        email: 'vikram.s@mil.local',
+        isVerified: true,
+        isBiometricDone: true,
+      },
+      {
+        fullName: 'Arjun Mehra',
+        employeeId: '13257105',
+        branch: 'security operations',
+        position: 'general',
+        email: 'arjun.m@mil.local',
+        isVerified: true,
+        isBiometricDone: true,
+      }
     ];
 
     const employees = [];
     for (const e of employeesData) {
       const emp = await Employee.create(e);
       employees.push(emp);
-      console.log(`🪪 Created employee: ${e.fullName} (${e.employeeId})`);
+      console.log(`🪪 Created employee record: ${e.fullName} (${e.branch})`);
     }
 
     // ── Create Cards ───────────────────────────────────────
@@ -88,34 +106,49 @@ const seed = async () => {
         employeeId: employees[0]._id,
         userId: users[2]._id,
         isActive: true,
-        accessCount: 15,
+        accessCount: 42,
       },
       {
-        cardNumber: 'SGS-20240405-1002',
+        cardNumber: '82A3E14',
         employeeId: employees[1]._id,
         userId: users[3]._id,
         isActive: true,
+        accessCount: 12,
+      },
+      {
+        cardNumber: 'B9C2F55',
+        employeeId: employees[2]._id,
+        isActive: true,
         accessCount: 5,
       },
+      {
+        cardNumber: 'D1E0A88',
+        employeeId: employees[3]._id,
+        isActive: true,
+        accessCount: 1,
+      }
     ];
 
     for (const c of cardsData) {
       await Card.create(c);
-      console.log(`💳 Created card: ${c.cardNumber}`);
+      console.log(`💳 Created card: ${c.cardNumber} [${c.isActive ? 'ACTIVE' : 'INACTIVE'}]`);
     }
 
     // ── Create Sample Access Logs ──────────────────────────
     const logs = [
-      { cardNumber: '51F2D26', employeeName: 'Tamanna saini', employeeId: '13257062', event: 'ACCESS_GRANTED', step: 'GATE', message: 'Auth success' },
-      { cardNumber: 'SGS-20240405-1002', employeeName: 'sonakshi', employeeId: '13257035', event: 'ACCESS_GRANTED', step: 'GATE', message: 'Auth success' },
+      { cardNumber: '51F2D26', employeeName: 'Tamanna saini', employeeId: '13257062', event: 'ACCESS_GRANTED', step: 'GATE', message: 'Biometric Verified' },
+      { cardNumber: '82A3E14', employeeName: 'Sonakshi Dhiman', employeeId: '13257035', event: 'ACCESS_GRANTED', step: 'GATE', message: 'Gate Access Granted' },
+      { cardNumber: 'UNKNOWN', employeeName: 'Unknown', employeeId: 'N/A', event: 'ACCESS_DENIED', step: 'GATE', message: 'No record found' },
+      { cardNumber: 'B9C2F55', employeeName: 'Vikram Singh', employeeId: '13257099', event: 'FINGERPRINT_FAIL', step: 'BIOMETRIC', message: 'Retry required' },
+      { cardNumber: 'D1E0A88', employeeName: 'Arjun Mehra', employeeId: '13257105', event: 'ACCESS_GRANTED', step: 'GATE', message: 'Commander Entry' },
     ];
 
     for (const log of logs) {
       await AccessLog.create(log);
     }
-    console.log(`📝 Created accessibility log entries`);
+    console.log(`📝 Generated ${logs.length} detailed access logs`);
 
-    console.log('\n✅ Seed complete!\n');
+    console.log('\n🌟 Military Deployment Seed Complete!\n');
     process.exit(0);
   } catch (error) {
     console.error('❌ Seed failed:', error.message);

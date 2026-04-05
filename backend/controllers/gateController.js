@@ -1,4 +1,6 @@
 const AccessLog = require('../models/AccessLog');
+const Card = require('../models/Card');
+const Employee = require('../models/Employee');
 
 // Gate state stored in memory (could be persisted if needed)
 let gateState = { isOpen: false, lastOpened: null, lastClosed: null };
@@ -10,24 +12,43 @@ const getGateStatus = (req, res) => {
 };
 
 // @route  POST /api/gate/open
-// @access Public (triggered after OTP success)
+// @access Public (triggered by Biometric match or Admin click)
 const openGate = async (req, res, next) => {
   try {
-    const { rfidUid, employeeName, employeeId, cardNumber } = req.body;
+    const { cardNumber, fingerprintId, message } = req.body;
 
     gateState.isOpen = true;
     gateState.lastOpened = new Date();
 
-    await AccessLog.create({
-      cardNumber: cardNumber || null,
-      rfidUid: rfidUid || null,
-      employeeName: employeeName || 'Unknown',
-      employeeId: employeeId || null,
+    let logData = {
       event: 'GATE_OPEN',
-      step: 'GATE',
-      message: 'Gate opened – Access Granted',
+      step: 'BIOMETRIC',
+      message: message || 'Biometric Access Granted',
       ipAddress: req.ip,
-    });
+    };
+
+    // If card number or finger ID provided, try to find the person
+    if (cardNumber || fingerprintId) {
+      const card = await Card.findOne({ 
+        $or: [
+          { cardNumber: cardNumber },
+          { fingerprintId: fingerprintId }
+        ]
+      }).populate('employeeId');
+
+      if (card && card.employeeId) {
+        logData.cardNumber = card.cardNumber;
+        logData.employeeName = card.employeeId.fullName;
+        logData.employeeId = card.employeeId.employeeId;
+        
+        // Update access count
+        card.accessCount = (card.accessCount || 0) + 1;
+        card.lastAccess = new Date();
+        await card.save();
+      }
+    }
+
+    await AccessLog.create(logData);
 
     // Auto-close after 10 seconds (simulate)
     setTimeout(async () => {
@@ -36,7 +57,7 @@ const openGate = async (req, res, next) => {
       await AccessLog.create({
         event: 'GATE_CLOSE',
         step: 'GATE',
-        message: 'Gate auto-closed after 10s',
+        message: 'Gate auto-closed (System Security)',
       });
     }, 10000);
 
@@ -56,7 +77,7 @@ const closeGate = async (req, res, next) => {
     await AccessLog.create({
       event: 'GATE_CLOSE',
       step: 'GATE',
-      message: 'Gate manually closed by admin',
+      message: 'Gate manually closed by Security Officer',
     });
 
     res.json({ success: true, message: 'Gate closed.', gate: gateState });

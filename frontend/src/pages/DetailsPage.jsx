@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { User, Hash, Building2, Briefcase, Mail, Camera, AlertCircle, CheckCircle } from 'lucide-react'
+import { User, Hash, Building2, Briefcase, Mail, Camera, AlertCircle } from 'lucide-react'
 import { saveDetails } from '../services/userService'
 import toast from 'react-hot-toast'
 
@@ -31,7 +31,6 @@ export default function DetailsPage() {
   const [photoPreview, setPhotoPreview] = useState(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
-  const [generatedCode, setGeneratedCode] = useState(null)
 
   const handleChange = e => {
     setForm(p => ({ ...p, [e.target.name]: e.target.value }))
@@ -59,10 +58,9 @@ export default function DetailsPage() {
       Object.keys(form).forEach(k => fd.append(k, form[k]))
       if (photo) fd.append('photo', photo)
 
-      const res = await saveDetails(fd)
-      setGeneratedCode(res.data.verificationCode)
-      sessionStorage.setItem('sgs_vcode', res.data.verificationCode)
-      toast.success('Details saved! Verification code generated.')
+      await saveDetails(fd)
+      toast.success('Details verified! Proceeding to biometric scan...')
+      setTimeout(() => navigate('/biometric'), 1000)
     } catch (err) {
       const msg = err.response?.data?.message || 'Invalid details. Please check and try again.'
       setError(msg)
@@ -70,36 +68,6 @@ export default function DetailsPage() {
     } finally {
       setLoading(false)
     }
-  }
-
-  if (generatedCode) {
-    return (
-      <div className="page-content">
-        <div className="form-card text-center space-y-6">
-          <div className="w-16 h-16 bg-accent-500/20 rounded-2xl flex items-center justify-center mx-auto">
-            <CheckCircle size={32} className="text-accent-400" />
-          </div>
-          <div>
-            <h2 className="text-xl font-bold text-white">Verification Code Generated</h2>
-            <p className="text-slate-400 text-sm mt-1">Use this code on the Authorization page</p>
-          </div>
-          <div className="glass-strong rounded-2xl p-6">
-            <p className="text-slate-400 text-xs uppercase tracking-wider mb-2">Your Verification Code</p>
-            <div className="font-mono text-6xl font-bold text-primary-400 tracking-[0.3em] otp-digit">
-              {generatedCode}
-            </div>
-            <p className="text-slate-500 text-xs mt-3">⏱ Valid for 10 minutes</p>
-          </div>
-          <div className="alert-info text-sm text-left">
-            <span>📋</span>
-            <p>Copy this code — you'll need it on the next page. It won't be shown again.</p>
-          </div>
-          <button id="btn-proceed-authorize" onClick={() => navigate('/authorize')} className="btn-primary w-full">
-            Proceed to Authorization →
-          </button>
-        </div>
-      </div>
-    )
   }
 
   return (
@@ -111,7 +79,7 @@ export default function DetailsPage() {
             <div className="step-badge">2</div>
             <h1 className="text-2xl font-bold text-white">Identity Verification</h1>
           </div>
-          <p className="text-slate-400 text-sm ml-12">Enter your details to generate a verification code</p>
+          <p className="text-slate-400 text-sm ml-12">Enter your military credentials to generate your access profile</p>
         </div>
 
         <div className="glass p-8 shadow-glass">
@@ -148,16 +116,16 @@ export default function DetailsPage() {
                   <div className="relative">
                     <User size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
                     <input id="det-fullName" name="fullName" type="text" value={form.fullName} onChange={handleChange}
-                      placeholder="John Doe" className="input-field pl-11" />
+                      placeholder="e.g. Tamanna Saini" className="input-field pl-11" />
                   </div>
                 </div>
                 {/* Employee ID */}
                 <div>
-                  <label className="form-label" htmlFor="det-empId">Employee ID *</label>
+                  <label className="form-label" htmlFor="det-empId">Service Number (ID) *</label>
                   <div className="relative">
                     <Hash size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
                     <input id="det-empId" name="employeeId" type="text" value={form.employeeId} onChange={handleChange}
-                      placeholder="EMP-001" className="input-field pl-11 uppercase" />
+                      placeholder="e.g. 13257062" className="input-field pl-11 uppercase" />
                   </div>
                 </div>
               </div>
@@ -189,11 +157,11 @@ export default function DetailsPage() {
 
             {/* Email */}
             <div>
-              <label className="form-label" htmlFor="det-email">Email *</label>
+              <label className="form-label" htmlFor="det-email">Gmail Address *</label>
               <div className="relative">
                 <Mail size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
                 <input id="det-email" name="email" type="email" value={form.email} onChange={handleChange}
-                  placeholder="you@company.com" className="input-field pl-11" />
+                  placeholder="e.g. tamanna@gmail.com" className="input-field pl-11" />
               </div>
             </div>
 
@@ -201,9 +169,9 @@ export default function DetailsPage() {
               {loading ? (
                 <span className="flex items-center justify-center gap-2">
                   <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                  Verifying details...
+                  Verifying...
                 </span>
-              ) : 'Submit Details & Generate Code →'}
+              ) : 'Confirm Details & Continue →'}
             </button>
           </form>
         </div>
