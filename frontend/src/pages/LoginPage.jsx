@@ -139,13 +139,9 @@ export default function LoginPage() {
                 <br />
                 <span className="text-slate-500">{d.email}</span>
               </button>
-            ))}
+            ))}       
           </div>
         </div>
-
-        <p className="text-center text-slate-600 text-xs mt-6">
-          🔒 Local network only · No cloud · No data leaves your device
-        </p>
       </div>
     </div>
   )

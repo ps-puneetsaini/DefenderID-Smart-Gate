@@ -2,7 +2,7 @@
 
 **DefenderID** is a high-security, local-first identity verification and gate access system designed for military and defense environments. It combines web-based personnel management with physical IoT-based gate control.
 
----
+----------------
 
 ## 🚀 Key Features
 
