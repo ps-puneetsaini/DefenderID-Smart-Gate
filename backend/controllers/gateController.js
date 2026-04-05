@@ -86,4 +86,41 @@ const closeGate = async (req, res, next) => {
   }
 };
 
-module.exports = { getGateStatus, openGate, closeGate };
+// @route  GET /api/gate/logs
+// @access Private (Admin only)
+const getAccessLogs = async (req, res, next) => {
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 50;
+    const skip = (page - 1) * limit;
+
+    const logs = await AccessLog.find()
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit);
+
+    res.json({ success: true, logs });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @route  GET /api/gate/card/:cardNumber
+// @access Private (Security/Admin lookup)
+const verifyCard = async (req, res, next) => {
+  try {
+    const { cardNumber } = req.params;
+    const card = await Card.findOne({ cardNumber: cardNumber.toUpperCase() })
+      .populate('employeeId');
+
+    if (!card) {
+      return res.status(404).json({ success: false, message: 'Card not found.' });
+    }
+
+    res.json({ success: true, data: card });
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = { getGateStatus, openGate, closeGate, getAccessLogs, verifyCard };
