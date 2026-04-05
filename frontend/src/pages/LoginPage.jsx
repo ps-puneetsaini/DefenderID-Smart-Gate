@@ -125,10 +125,10 @@ export default function LoginPage() {
           <div className="divider mt-6"><span>Demo Accounts</span></div>
           <div className="grid grid-cols-2 gap-2">
             {[
-              { label: '👤 User',     email: 'john.doe@company.com',  pass: 'password123' },
-              { label: '🛡 Admin',    email: 'admin@gate.local',      pass: 'admin123'    },
-              { label: '💼 User 2',   email: 'jane.smith@company.com',pass: 'password123' },
-              { label: '🔍 Security', email: 'security@gate.local',   pass: 'security123' },
+              { label: '🛡 Admin',    email: 'admin@gate.local',           pass: 'admin123'    },
+              { label: '🔍 Security', email: 'security@gate.local',        pass: 'security123' },
+              { label: '👤 Tamanna',  email: 'tamannasaini860@gmail.com',  pass: 'tanusaini'  },
+              { label: '👤 Sonakshi', email: 'sonakshidhiman12@gmail.com', pass: 'sonakshi12'  },
             ].map(d => (
               <button
                 key={d.email}
