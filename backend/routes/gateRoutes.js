@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { getGateStatus, openGate, closeGate } = require('../controllers/gateController');
+const { getGateStatus, openGate, closeGate, getAccessLogs, verifyCard } = require('../controllers/gateController');
 const { protect, adminOnly } = require('../middleware/authMiddleware');
 
 // ESP32 polls this — no auth (LAN only)
