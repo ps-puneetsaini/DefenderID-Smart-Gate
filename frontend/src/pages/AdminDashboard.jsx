@@ -144,7 +144,7 @@ export default function AdminDashboard() {
                   <table className="w-full text-sm">
                     <thead>
                       <tr className="text-slate-500 text-xs uppercase tracking-wider border-b border-white/5">
-                        {['Time', 'Event', 'Step', 'Employee', 'RFID / Card'].map(h => (
+                        {['Time', 'Event', 'Step', 'Employee', 'Unique Card ID'].map(h => (
                           <th key={h} className="px-4 py-3 text-left font-medium">{h}</th>
                         ))}
                       </tr>
@@ -162,8 +162,8 @@ export default function AdminDashboard() {
                             <span className="status-pill-blue">{log.step}</span>
                           </td>
                           <td className="px-4 py-3 text-slate-300">{log.employeeName || '—'}</td>
-                          <td className="px-4 py-3 font-mono text-xs text-slate-400">
-                            {log.rfidUid || log.cardNumber || '—'}
+                          <td className="px-4 py-3 font-mono text-[10px] text-slate-400">
+                            {log.cardNumber || log.rfidUid || '—'}
                           </td>
                         </tr>
                       ))}
@@ -225,6 +225,7 @@ export default function AdminDashboard() {
 
                   <div className="space-y-2">
                     {[
+                      { icon: <CreditCard size={12} />, label: 'CARD ID', value: lookupResult.cardNumber },
                       { icon: <Hash size={12} />, label: 'EMP ID', value: lookupResult.employeeId?.employeeId },
                       { icon: <Building2 size={12} />, label: 'Branch', value: lookupResult.employeeId?.branch },
                       { icon: <Briefcase size={12} />, label: 'Position', value: lookupResult.employeeId?.position },
