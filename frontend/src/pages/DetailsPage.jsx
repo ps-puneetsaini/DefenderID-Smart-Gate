@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { User, Hash, Building2, Briefcase, Mail, Camera, AlertCircle } from 'lucide-react'
+import { User, Hash, Building2, Briefcase, Mail, Camera, AlertCircle, KeyRound, ArrowRight } from 'lucide-react'
 import { saveDetails } from '../services/userService'
 import toast from 'react-hot-toast'
 
@@ -46,6 +46,9 @@ export default function DetailsPage() {
     reader.readAsDataURL(file)
   }
 
+  const [showCode, setShowCode] = useState(false)
+  const [generatedCode, setGeneratedCode] = useState('')
+
   const handleSubmit = async e => {
     e.preventDefault()
     if (!form.fullName || !form.employeeId || !form.branch || !form.position || !form.email) {
@@ -58,9 +61,10 @@ export default function DetailsPage() {
       Object.keys(form).forEach(k => fd.append(k, form[k]))
       if (photo) fd.append('photo', photo)
 
-      await saveDetails(fd)
-      toast.success('Details verified! Proceeding to biometric scan...')
-      setTimeout(() => navigate('/biometric'), 1000)
+      const res = await saveDetails(fd)
+      setGeneratedCode(res.data.verificationCode)
+      setShowCode(true)
+      toast.success('Details verified! Authorization code generated.')
     } catch (err) {
       const msg = err.response?.data?.message || 'Invalid details. Please check and try again.'
       setError(msg)
@@ -176,6 +180,38 @@ export default function DetailsPage() {
           </form>
         </div>
       </div>
+
+      {/* Success Modal */}
+      {showCode && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-dark-950/80 backdrop-blur-sm animate-fade-in">
+          <div className="glass max-w-sm w-full p-8 text-center shadow-2xl border-primary-500/30">
+            <div className="w-16 h-16 bg-accent-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+              <KeyRound size={32} className="text-accent-400" />
+            </div>
+            <h2 className="text-xl font-bold text-white mb-2">Details Verified!</h2>
+            <p className="text-slate-400 text-sm mb-6">Your unique authorization code is:</p>
+            
+            <div className="bg-dark-600 border border-white/10 rounded-2xl py-4 mb-8">
+              <span className="text-5xl font-black tracking-widest text-primary-400 font-mono">
+                {generatedCode}
+              </span>
+            </div>
+
+            <p className="text-xs text-slate-500 mb-8 italic">
+              Please note this code. You will need it on the next page to proceed with your biometric scan.
+            </p>
+
+            <button
+              onClick={() => navigate('/authorize')}
+              className="btn-primary w-full py-4 flex items-center justify-center gap-2 group"
+            >
+              Proceed to Authorization
+              <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
+
