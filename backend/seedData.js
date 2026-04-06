@@ -66,8 +66,8 @@ const seed = async () => {
         userId: users[3]._id,
         fullName: 'Sonakshi Dhiman',
         employeeId: '13257035',
-        branch: 'military operations',
-        position: 'Captain',
+        branch: 'defense security',
+        position: 'solider',
         email: 'sonakshidhiman12@gmail.com',
         isVerified: true,
         isBiometricDone: true,
@@ -78,6 +78,7 @@ const seed = async () => {
         branch: 'defense intelligence',
         position: 'major',
         email: 'vikram.s@mil.local',
+        userId: users[1]._id,
         isVerified: true,
         isBiometricDone: true,
       },
@@ -87,6 +88,7 @@ const seed = async () => {
         branch: 'security operations',
         position: 'general',
         email: 'arjun.m@mil.local',
+        userId: users[1]._id,
         isVerified: true,
         isBiometricDone: true,
       }
@@ -109,7 +111,7 @@ const seed = async () => {
         accessCount: 42,
       },
       {
-        cardNumber: '82A3E14',
+        cardNumber: 'A780D46',
         employeeId: employees[1]._id,
         userId: users[3]._id,
         isActive: true,
@@ -118,12 +120,14 @@ const seed = async () => {
       {
         cardNumber: 'B9C2F55',
         employeeId: employees[2]._id,
+        userId: users[1]._id,
         isActive: true,
         accessCount: 5,
       },
       {
         cardNumber: 'D1E0A88',
         employeeId: employees[3]._id,
+        userId: users[1]._id,
         isActive: true,
         accessCount: 1,
       }
@@ -137,9 +141,9 @@ const seed = async () => {
     // ── Create Sample Access Logs ──────────────────────────
     const logs = [
       { cardNumber: '51F2D26', employeeName: 'Tamanna saini', employeeId: '13257062', event: 'ACCESS_GRANTED', step: 'GATE', message: 'Biometric Verified' },
-      { cardNumber: '82A3E14', employeeName: 'Sonakshi Dhiman', employeeId: '13257035', event: 'ACCESS_GRANTED', step: 'GATE', message: 'Gate Access Granted' },
+      { cardNumber: 'A780D46', employeeName: 'Sonakshi Dhiman', employeeId: '13257035', event: 'ACCESS_GRANTED', step: 'GATE', message: 'Gate Access Granted' },
       { cardNumber: 'UNKNOWN', employeeName: 'Unknown', employeeId: 'N/A', event: 'ACCESS_DENIED', step: 'GATE', message: 'No record found' },
-      { cardNumber: 'B9C2F55', employeeName: 'Vikram Singh', employeeId: '13257099', event: 'FINGERPRINT_FAIL', step: 'BIOMETRIC', message: 'Retry required' },
+      { cardNumber: 'B9C2F55', employeeName: 'Vikram Singh', employeeId: '13257099', event: 'FINGERPRINT_FAIL', step: 'FINGERPRINT', message: 'Retry required' },
       { cardNumber: 'D1E0A88', employeeName: 'Arjun Mehra', employeeId: '13257105', event: 'ACCESS_GRANTED', step: 'GATE', message: 'Commander Entry' },
     ];
 

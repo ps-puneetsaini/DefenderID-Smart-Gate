@@ -228,7 +228,7 @@ export default function AdminDashboard() {
                       { icon: <Hash size={12} />, label: 'EMP ID', value: lookupResult.employee.employeeId },
                       { icon: <Building2 size={12} />, label: 'Branch', value: lookupResult.employee.branch },
                       { icon: <Briefcase size={12} />, label: 'Position', value: lookupResult.employee.position },
-                      { icon: <User size={12} />, label: 'Email', value: lookupResult.employee.email },
+                      { icon: <User size={12} />, label: 'Gmail', value: lookupResult.employee.email },
                     ].map(item => (
                       <div key={item.label} className="flex items-center gap-2 text-[11px]">
                         <span className="text-slate-500">{item.icon}</span>
