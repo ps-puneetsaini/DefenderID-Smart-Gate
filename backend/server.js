@@ -5,8 +5,17 @@ const dotenv = require('dotenv');
 const connectDB = require('./config/db');
 const errorHandler = require('./middleware/errorHandler');
 
+const fs = require('fs');
+
 // Load env vars
 dotenv.config({ path: path.join(__dirname, '.env') });
+
+// Create uploads directory if not exists
+const uploadsDir = path.join(__dirname, 'uploads');
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir, { recursive: true });
+  console.log('📁 Created uploads directory');
+}
 
 // Connect to MongoDB
 connectDB();
