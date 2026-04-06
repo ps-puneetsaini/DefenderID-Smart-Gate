@@ -110,8 +110,12 @@ const getAccessLogs = async (req, res, next) => {
 const verifyCard = async (req, res, next) => {
   try {
     const { cardNumber } = req.params;
-    const card = await Card.findOne({ cardNumber: cardNumber.toUpperCase() })
-      .populate('employeeId');
+    const card = await Card.findOne({
+      $or: [
+        { cardNumber: cardNumber.toUpperCase() },
+        { rfidUid: cardNumber.toUpperCase() }
+      ]
+    }).populate('employeeId');
 
     if (!card) {
       return res.status(404).json({ success: false, message: 'Card not found.' });

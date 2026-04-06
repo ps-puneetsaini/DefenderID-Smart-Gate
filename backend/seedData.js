@@ -104,14 +104,16 @@ const seed = async () => {
     // ── Create Cards ───────────────────────────────────────
     const cardsData = [
       {
-        cardNumber: '51F2D26',
+        cardNumber: 'SGS-20260406-6436',
+        rfidUid: '51F2D26',
         employeeId: employees[0]._id,
         userId: users[2]._id,
         isActive: true,
         accessCount: 42,
       },
       {
-        cardNumber: 'A780D46',
+        cardNumber: 'SGS-20260406-7102',
+        rfidUid: 'A780D46',
         employeeId: employees[1]._id,
         userId: users[3]._id,
         isActive: true,
