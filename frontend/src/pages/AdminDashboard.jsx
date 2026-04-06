@@ -207,15 +207,15 @@ export default function AdminDashboard() {
                 <div className="mt-4 pt-4 border-t border-white/10 animate-fade-in space-y-4">
                   <div className="flex items-center gap-3">
                     <div className="w-14 h-14 rounded-xl border border-white/20 overflow-hidden bg-dark-600">
-                      {lookupResult.employee.photoPath ? (
-                        <img src={`http://localhost:5000${lookupResult.employee.photoPath}`} alt="" className="w-full h-full object-cover" />
+                      {lookupResult.employeeId?.photoPath ? (
+                        <img src={`http://localhost:5000${lookupResult.employeeId.photoPath}`} alt="" className="w-full h-full object-cover" />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center text-xl">👤</div>
                       )}
                     </div>
                     <div>
-                      <p className="text-white font-bold text-sm leading-tight">{lookupResult.employee.fullName}</p>
-                      <p className="text-primary-400 text-[10px] uppercase tracking-wider">{lookupResult.employee.position}</p>
+                      <p className="text-white font-bold text-sm leading-tight">{lookupResult.employeeId?.fullName}</p>
+                      <p className="text-primary-400 text-[10px] uppercase tracking-wider">{lookupResult.employeeId?.position}</p>
                       <div className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[9px] mt-1 ${lookupResult.isActive ? 'bg-accent-500/10 text-accent-400' : 'bg-danger-500/10 text-danger-400'}`}>
                         <div className={`w-1 h-1 rounded-full ${lookupResult.isActive ? 'bg-accent-400' : 'bg-danger-400'}`} />
                         {lookupResult.isActive ? 'ACTIVE' : 'INACTIVE'}
@@ -225,10 +225,10 @@ export default function AdminDashboard() {
 
                   <div className="space-y-2">
                     {[
-                      { icon: <Hash size={12} />, label: 'EMP ID', value: lookupResult.employee.employeeId },
-                      { icon: <Building2 size={12} />, label: 'Branch', value: lookupResult.employee.branch },
-                      { icon: <Briefcase size={12} />, label: 'Position', value: lookupResult.employee.position },
-                      { icon: <User size={12} />, label: 'Gmail', value: lookupResult.employee.email },
+                      { icon: <Hash size={12} />, label: 'EMP ID', value: lookupResult.employeeId?.employeeId },
+                      { icon: <Building2 size={12} />, label: 'Branch', value: lookupResult.employeeId?.branch },
+                      { icon: <Briefcase size={12} />, label: 'Position', value: lookupResult.employeeId?.position },
+                      { icon: <User size={12} />, label: 'Gmail', value: lookupResult.employeeId?.email },
                     ].map(item => (
                       <div key={item.label} className="flex items-center gap-2 text-[11px]">
                         <span className="text-slate-500">{item.icon}</span>
